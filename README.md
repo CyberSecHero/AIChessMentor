@@ -28,4 +28,4 @@ For questions, suggestions, or feedback, please contact Martin Leon at martinleo
 
 
 # SCREENSHOTS
-![image]('screenshots/chess_game.png')
+![image](screenshots/chess_game.png)
