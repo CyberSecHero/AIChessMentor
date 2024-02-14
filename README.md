@@ -25,3 +25,7 @@ If you're passionate about chess, machine learning, or game development, we'd lo
 ## Contact
 
 For questions, suggestions, or feedback, please contact Martin Leon at martinleontech23@gmail.com.
+
+
+# SCREENSHOTS
+![image]('screenshots/chess_game.png')
