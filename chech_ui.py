@@ -7,7 +7,6 @@ class ChessGUI:
         self.canvas = tk.Canvas(master, width=480, height=480)
         self.canvas.pack()
 
-        # Load and resize piece images
         self.piece_images = {
             "pawn_white": tk.PhotoImage(file="pieces/png/white-pawn.png").subsample(2),
             "pawn_black": tk.PhotoImage(file="pieces/png/black-pawn.png").subsample(2),
@@ -23,7 +22,20 @@ class ChessGUI:
             "king_black": tk.PhotoImage(file="pieces/png/black-king.png").subsample(2),
         }
 
+        self.board = [
+            ["rook_black", "knight_black", "bishop_black", "queen_black", "king_black", "bishop_black", "knight_black", "rook_black"],
+            ["pawn_black"] * 8,
+            [None] * 8,
+            [None] * 8,
+            [None] * 8,
+            [None] * 8,
+            ["pawn_white"] * 8,
+            ["rook_white", "knight_white", "bishop_white", "queen_white", "king_white", "bishop_white", "knight_white", "rook_white"]
+        ]
+
         self.draw_board()
+
+        self.canvas.bind("<Button-1>", self.on_click)
 
     def draw_board(self):
         colors = ["white", "gray"]
@@ -34,20 +46,30 @@ class ChessGUI:
                 x1, y1 = x0 + 60, y0 + 60
                 self.canvas.create_rectangle(x0, y0, x1, y1, fill=color)
 
-        # Place pieces on the board
-        for row, pieces in enumerate([
-            ["rook_black", "knight_black", "bishop_black", "queen_black", "king_black", "bishop_black", "knight_black", "rook_black"],
-            ["pawn_black"] * 8,
-            [None] * 8,
-            [None] * 8,
-            [None] * 8,
-            [None] * 8,
-            ["pawn_white"] * 8,
-            ["rook_white", "knight_white", "bishop_white", "queen_white", "king_white", "bishop_white", "knight_white", "rook_white"]
-        ]):
+        for row, pieces in enumerate(self.board):
             for col, piece in enumerate(pieces):
                 if piece:
                     self.canvas.create_image(col * 60 + 30, row * 60 + 30, image=self.piece_images[piece])
+
+    def move_piece(self, start, end):
+        start_row, start_col = start
+        end_row, end_col = end
+        piece = self.board[start_row][start_col]
+        if piece:
+            self.canvas.create_rectangle(start_col * 60, start_row * 60, (start_col + 1) * 60, (start_row + 1) * 60, fill="white")
+
+            self.board[end_row][end_col] = piece
+            self.board[start_row][start_col] = None
+            self.canvas.create_image(end_col * 60 + 30, end_row * 60 + 30, image=self.piece_images[piece])
+
+    def on_click(self, event):
+        col = event.x // 60
+        row = event.y // 60
+        print("Clicked at row:", row, "column:", col)
+
+        # Example: Move piece at column 2, row 2 to column 2, row 3
+        if (row, col) == (1, 1):
+            self.move_piece((1, 1), (2, 5))
 
 def main():
     root = tk.Tk()
